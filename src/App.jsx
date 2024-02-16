@@ -5,6 +5,7 @@ import Activities from "./pages/Activities"
 import About from "./pages/About"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
+import FooterComponent from "./components/FooterComponent"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+        <FooterComponent />
       </Router>
     </>
   )
