@@ -2,6 +2,8 @@ import axios from 'axios'
 import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice'
 
 const Login = () => {
 
@@ -10,8 +12,8 @@ const Login = () => {
     password: ""
   })
 
-  const [loader, setLoader] = useState(false)
-  const [errorMsg, setErrorMsg] = useState(null)
+  const dispatch = useDispatch()
+  const {loader, error: errorMsg} = useSelector(state => state.user)
   const navigate = useNavigate()
 
 
@@ -24,11 +26,9 @@ const Login = () => {
   
   const handleSubmit = async (ev) => {
     ev.preventDefault()
-    setErrorMsg(null)
-    setLoader(true)
+    dispatch(signInStart())
     if (details.email === '' || details.password === '') {
-      setLoader(false)
-      return setErrorMsg("Please fill out all Field")
+      return dispatch(signInFailure("Please fill out all Field"))
     }
     try {
       const res = await axios.post("http://localhost:3000/auth/login", details, {
@@ -36,15 +36,15 @@ const Login = () => {
       })
       console.log(res)
       if (res.status === 201) {
+        dispatch(signInSuccess(res.data))
         navigate('/')
       } else {
-        setErrorMsg(res.response.data.message)
+        dispatch(signInFailure(res.response.data.message))
       }
     } catch (error) {
       console.log(error)
-      setErrorMsg(error.response.data.message)
+      dispatch(signInFailure(error.response.data.message))
     }
-    setLoader(false)
   }
 
   return (
