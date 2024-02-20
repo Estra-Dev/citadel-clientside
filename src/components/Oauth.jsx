@@ -30,6 +30,7 @@ const Oauth = () => {
         headers: {"Content-Type": "application/json "}
       })
 
+      console.log(res)
       if (res.status === 201) {
         dispatch(signInSuccess(res.data))
         navigate('/')
