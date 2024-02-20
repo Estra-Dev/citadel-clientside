@@ -1,14 +1,17 @@
 import React from 'react'
 import { Navbar, TextInput, Button, Dropdown, Avatar } from "flowbite-react"
 import { FaSearch } from "react-icons/fa";
-import { LuMoonStar } from "react-icons/lu";
+import { LuMoonStar, LuSun } from "react-icons/lu";
 import { Link, useLocation } from "react-router-dom"
-import {useSelector} from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { toogleTheme } from '../redux/user/themeSlice';
 
 const NavBar = () => {
 
   const path = useLocation().pathname
-  const {currentUser} = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const {theme} = useSelector(state => state.theme)
 
   return (
     <Navbar className=' border-b-2'>
@@ -27,8 +30,9 @@ const NavBar = () => {
 
 
       <div className=" flex gap-2 md:order-2">
-        <Button className=' w-12 h-12 hidden sm:inline' color='gray' pill>
-          <LuMoonStar />
+        <Button className=' w-12 h-10 hidden sm:inline' color='gray' pill onClick={() => dispatch(toogleTheme())}>
+          {theme === 'light' ? (<LuMoonStar />) : (<LuSun />) }
+          
         </Button>
         {
           currentUser ? (
