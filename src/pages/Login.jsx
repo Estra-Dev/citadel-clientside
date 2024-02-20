@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice'
+import Oauth from '../components/Oauth'
 
 const Login = () => {
 
@@ -75,6 +76,7 @@ const Login = () => {
               <Spinner /> 
               <span className=' pl-3'>Loading...</span>
             </>) : "Log In"}</Button>
+            <Oauth />
           </form>
           {
             errorMsg && <Alert className=' mt-3' color='failure'>{ errorMsg }</Alert>
