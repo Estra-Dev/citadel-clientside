@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { LuMoonStar, LuSun } from "react-icons/lu";
 import { Link, useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { toogleTheme } from '../redux/user/themeSlice';
+import { toogleTheme } from '../redux/theme/themeSlice';
 
 const NavBar = () => {
 
@@ -37,11 +37,11 @@ const NavBar = () => {
         {
           currentUser ? (
             <Dropdown arrowIcon={false} inline label={
-              <Avatar alt='user' img={currentUser.rest.photoUrl} rounded />
+              <Avatar alt='user' img={currentUser.photoUrl || currentUser.rest.photoUrl} rounded />
             }>
               <Dropdown.Header>
-                <span className=' block text-sm'>@{ currentUser.rest.firstname + " " + currentUser.rest.lastname }</span>
-                <span className=' block text-sm font-medium truncate'>{ currentUser.rest.email }</span>
+                <span className=' block text-sm'>@{ currentUser.firstname || currentUser.rest.firstname + " " +  currentUser.lastname || currentUser.rest.lastname }</span>
+                <span className=' block text-sm font-medium truncate'>{ currentUser.email || currentUser.rest.email  }</span>
               </Dropdown.Header>
               <Link to={'/dashboard?tab=profile'}>
                 <Dropdown.Item>Profile</Dropdown.Item>

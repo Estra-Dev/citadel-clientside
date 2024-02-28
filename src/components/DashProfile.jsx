@@ -5,6 +5,9 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/st
 import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import axios from 'axios'
+import { updateStart, updateSuccess, updateFailure } from '../redux/user/userSlice'
+import { useDispatch } from 'react-redux'
 
 const DashProfile = () => {
 
@@ -13,6 +16,14 @@ const DashProfile = () => {
   const [imageFileUrl, setImageFileUrl] = useState(null)
   const [imageFileUploadingProgress, setImageFileUploadingProgress] = useState(null)
   const [imageFileUploadingError, setImageFileUploadingError] = useState(null)
+  const [formData, setFormData] = useState({})
+  const [imageFileUploading, setImageFileUploading] = useState(false)
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null)
+  const [updateUserError, setUpdateUserError] = useState(null)
+
+  const dispatch = useDispatch()
+
+
 
   // To enable us pick image when we click on the profile image
   const filePickerRef = useRef()
@@ -47,6 +58,7 @@ const DashProfile = () => {
     //     }
     //   }
     // }
+    setImageFileUploading(true)
     setImageFileUploadingProgress(null)
     const storage = getStorage(app)
     // to make the image name unique we add the new Date().getTime()
@@ -67,21 +79,61 @@ const DashProfile = () => {
         setImageFileUploadingProgress(null)
         setImageFile(null)
         setImageFileUrl(null)
+        setImageFileUploading(false)
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
           setImageFileUrl(downloadUrl)
+          setFormData({ ...formData, googlePhotoUrl: downloadUrl })
+          setImageFileUploading(false)
         })
       }
     )
 
   }
 
+  const handleChange = (ev) => {
+    const { name, value } = ev.target
+    setFormData({...formData, [name]: value})
+  }
+  console.log(formData)
+  
+  const handleSubmit = async (ev) => {
+    ev.preventDefault()
+    setUpdateUserSuccess(null)
+    setUpdateUserError(null)
+    if (Object.keys(formData).length === 0) {
+      setUpdateUserError('Nothing to Update')
+      return
+    }
+    if (imageFileUploading) {
+      setUpdateUserError('Wait for image to upload')
+      return
+    }
+    try {
+      dispatch(updateStart())
+      const res = await axios.put(`http://localhost:3000/user/update/${currentUser._id || currentUser.rest._id}`, formData, {
+        headers: {authorization: currentUser.token}
+      })
+      if (res.status === 201) {
+        dispatch(updateSuccess(res.data))
+        setUpdateUserSuccess("User Profile updated successfully")
+      } else {
+        setUpdateUserError(res.data)
+        dispatch(updateFailure(res.data))
+      }
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+      setUpdateUserError(error.response.data.message)
+      return dispatch(updateFailure(error.response.data.message))
+    }
+  }
   return (
     <div className=' max-w-lg mx-auto p-3 w-full'>
       <h1 className=' my-7 text-center font-semibold text-3xl'>Profile</h1>
 
-      <form className=' flex flex-col gap-4'>
+      <form className=' flex flex-col gap-4' onSubmit={handleSubmit}>
         <input type="file" accept='image/*' onChange={handleImageChange} ref={filePickerRef} hidden/>
         <div className=" w-32 h-32 self-center cursor-pointer shadow-md rounded-full overflow-hidden relative" onClick={() => filePickerRef.current.click()}>
           {imageFileUploadingProgress && (
@@ -103,23 +155,29 @@ const DashProfile = () => {
               }}
             />
           )}
-          <img src={imageFileUrl || currentUser.rest.photoUrl} alt="profile img" className={` rounded-full w-full h-full border-8 border-[lightgray] object-cover ${imageFileUploadingProgress && imageFileUploadingProgress < 100 && 'opacity-60'}`} />
+          <img src={imageFileUrl || currentUser.photoUrl || currentUser.rest.photoUrl} alt="profile img" className={` rounded-full w-full h-full border-8 border-[lightgray] object-cover ${imageFileUploadingProgress && imageFileUploadingProgress < 100 && 'opacity-60'}`} />
         </div>
         {
           imageFileUploadingError && (
             <Alert color={'failure'}>{ imageFileUploadingError }</Alert>
           )
         }
-        <TextInput type='text' name='firstname' placeholder='Firstname' defaultValue={currentUser.rest.firstname} />
-        <TextInput type='text' name='lastname' placeholder='Lastname' defaultValue={currentUser.rest.lastname} />
-        <TextInput type='email' name='name' placeholder='Email' defaultValue={currentUser.rest.email} />
-        <TextInput type='password' name='password' placeholder='*********' />
+        <TextInput type='text' name='firstname' placeholder='Firstname' defaultValue={ currentUser.firstname || currentUser.rest.firstname} onChange={handleChange} />
+        <TextInput type='text' name='lastname' placeholder='Lastname' defaultValue={ currentUser.lastname || currentUser.rest.lastname } onChange={handleChange} />
+        <TextInput type='email' name='email' placeholder='Email' defaultValue={ currentUser.email || currentUser.rest.email} onChange={handleChange}/>
+        <TextInput type='password' name='password' placeholder='*********' onChange={handleChange}/>
         <Button type='submit' gradientDuoTone={'purpleToBlue'} outline>Update</Button>
       </form>
       <div className=" text-red-500 flex justify-between mt-3">
         <span className=' cursor-pointer'>Delete Account</span>
         <span className=' cursor-pointer'>Sign Out</span>
       </div>
+      {updateUserSuccess && (
+        <Alert color={'success'} className=' mt-5'>{ updateUserSuccess }</Alert>
+      )}
+      {updateUserError && (
+        <Alert color={'failure'} className=' mt-5'>{ updateUserError }</Alert>
+      )}
     </div>
   )
 }
