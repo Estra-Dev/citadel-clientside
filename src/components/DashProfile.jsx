@@ -1,4 +1,4 @@
-import { Alert, Button, TextInput } from 'flowbite-react'
+import { Alert, Button, Modal, TextInput } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/storage'
@@ -6,12 +6,14 @@ import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import axios from 'axios'
-import { updateStart, updateSuccess, updateFailure } from '../redux/user/userSlice'
+import { updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux'
+import { BsExclamationCircle } from "react-icons/bs";
+import { data } from 'autoprefixer'
 
 const DashProfile = () => {
 
-  const { currentUser } = useSelector(state => state.user)
+  const { currentUser, error } = useSelector(state => state.user)
   const [imageFile, setImageFile] = useState(null)
   const [imageFileUrl, setImageFileUrl] = useState(null)
   const [imageFileUploadingProgress, setImageFileUploadingProgress] = useState(null)
@@ -20,6 +22,7 @@ const DashProfile = () => {
   const [imageFileUploading, setImageFileUploading] = useState(false)
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null)
   const [updateUserError, setUpdateUserError] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -129,6 +132,25 @@ const DashProfile = () => {
       return dispatch(updateFailure(error.response.data.message))
     }
   }
+
+  const handleDeleteUser = async () => {
+    setShowModal(false)
+    try {
+      dispatch(deleteUserStart())
+      const res = await axios.delete(`http://localhost:3000/user/delete/${currentUser._id || currentUser.rest._id}`, {
+        headers: {authorization: currentUser.token}
+      })
+      console.log(res)
+      if (res.status !== 202) {
+        dispatch(deleteUserFailure(res.data))
+      } else {
+        dispatch(deleteUserSuccess())
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
+  }
+
   return (
     <div className=' max-w-lg mx-auto p-3 w-full'>
       <h1 className=' my-7 text-center font-semibold text-3xl'>Profile</h1>
@@ -169,7 +191,7 @@ const DashProfile = () => {
         <Button type='submit' gradientDuoTone={'purpleToBlue'} outline>Update</Button>
       </form>
       <div className=" text-red-500 flex justify-between mt-3">
-        <span className=' cursor-pointer'>Delete Account</span>
+        <span onClick={() => setShowModal(true)} className=' cursor-pointer'>Delete Account</span>
         <span className=' cursor-pointer'>Sign Out</span>
       </div>
       {updateUserSuccess && (
@@ -178,6 +200,22 @@ const DashProfile = () => {
       {updateUserError && (
         <Alert color={'failure'} className=' mt-5'>{ updateUserError }</Alert>
       )}
+      {error && (
+        <Alert color={'failure'} className=' mt-5'>{ error }</Alert>
+      )}
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size={'md'}>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <BsExclamationCircle className=' h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className=' text-lg text-gray-500 mb-5 dark:text-gray-400'>Are you sure you want to delete your Account?</h3>
+            <div className=" flex justify-center gap-4">
+              <Button color='failure' onClick={handleDeleteUser}>Yes, I'm Sure</Button>
+              <Button onClick={() => setShowModal(false)} color='gray'>No, Cancel</Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }
