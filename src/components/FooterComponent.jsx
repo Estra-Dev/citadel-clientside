@@ -9,7 +9,7 @@ const FooterComponent = () => {
         <div className=" w-full grid justify-between sm:flex md:grid-cols-1">
           <div className=" w-[50px]">
             <Link className=" flex flex-col items-center">
-              <img src="https://scontent.flos5-2.fna.fbcdn.net/v/t39.30808-1/309121665_441507861406175_2439695572051372297_n.jpg?stp=dst-jpg_p200x200&_nc_cat=102&ccb=1-7&_nc_sid=596444&_nc_eui2=AeEc8UN1Cc40QutRo9LUYyBknM-f1qmQ1xWcz5_WqZDXFXVyGilXkXb3_NnydRgFU_SXjitqrGEPaLSu5d05L24b&_nc_ohc=1dV-5itHU6EAX93HQx9&_nc_ht=scontent.flos5-2.fna&oh=00_AfAf8eWpkw-86oa6xCCfrz-21ZqH-fShHUt8JCM5NhFAxA&oe=65D1B765" alt="logo" className=' w-9 h-9 rounded-full self-center' />
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP9AonzRpCljbE5zQq1CCKFm-lKlMlvDkZjBlvA74cEA&s" alt="logo" className=' w-9 h-9 rounded-full self-center' />
               <p className=' text-[10px] font-bold mt-1'>CITADEL</p>
             </Link>
           </div>

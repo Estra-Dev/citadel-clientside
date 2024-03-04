@@ -56,7 +56,7 @@ const Register = () => {
       <div className=" flex flex-col md:flex-row justify-center items-center gap-4 max-w-5xl mx-auto p-3">
         {/* left-side */}
         <div className=" flex flex-1 flex-col-reverse lg:flex-row justify-center items-center gap-3">
-          <img src="https://scontent.flos5-2.fna.fbcdn.net/v/t39.30808-1/309121665_441507861406175_2439695572051372297_n.jpg?stp=dst-jpg_p200x200&_nc_cat=102&ccb=1-7&_nc_sid=596444&_nc_eui2=AeEc8UN1Cc40QutRo9LUYyBknM-f1qmQ1xWcz5_WqZDXFXVyGilXkXb3_NnydRgFU_SXjitqrGEPaLSu5d05L24b&_nc_ohc=1dV-5itHU6EAX93HQx9&_nc_ht=scontent.flos5-2.fna&oh=00_AfAf8eWpkw-86oa6xCCfrz-21ZqH-fShHUt8JCM5NhFAxA&oe=65D1B765" alt="logo" className=' w-[70%] lg:w-[30%] rounded-full self-center' />
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP9AonzRpCljbE5zQq1CCKFm-lKlMlvDkZjBlvA74cEA&s" alt="logo" className=' w-[60%] lg:w-[30%] rounded-full self-center' />
           <div className="">
             <h1 className=' text-2xl font-bold mb-6 text-center'>Create a membership account</h1>
             <p className=' text-sm font-semibold mb-2'>Welcome, this is an Official Web App for all Members of Citadel of Treasure Ministry, Kindly register your membership</p>

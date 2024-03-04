@@ -9,7 +9,6 @@ import axios from 'axios'
 import { updateStart, updateSuccess, updateFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure } from '../redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import { BsExclamationCircle } from "react-icons/bs";
-import { data } from 'autoprefixer'
 
 const DashProfile = () => {
 
