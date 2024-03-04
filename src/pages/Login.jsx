@@ -33,7 +33,8 @@ const Login = () => {
     }
     try {
       const res = await axios.post("http://localhost:3000/auth/login", details, {
-        headers: {"Content-Type": "application/json"}
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
       })
       console.log(res)
       if (res.status === 201) {

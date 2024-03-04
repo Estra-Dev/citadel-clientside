@@ -27,7 +27,8 @@ const Oauth = () => {
         email: resultFroomGoogle._tokenResponse.email,
         googlePhotoUrl: resultFroomGoogle._tokenResponse.photoUrl
       }, {
-        headers: {"Content-Type": "application/json"}
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
       })
 
       console.log(res)

@@ -115,7 +115,8 @@ const DashProfile = () => {
     try {
       dispatch(updateStart())
       const res = await axios.put(`http://localhost:3000/user/update/${currentUser._id || currentUser.rest._id}`, formData, {
-        headers: {authorization: currentUser.token}
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true
       })
       if (res.status === 201) {
         dispatch(updateSuccess(res.data))
@@ -137,7 +138,8 @@ const DashProfile = () => {
     try {
       dispatch(deleteUserStart())
       const res = await axios.delete(`http://localhost:3000/user/delete/${currentUser._id || currentUser.rest._id}`, {
-        headers: {authorization: currentUser.token}
+        headers: { authorization: currentUser.token },
+        withCredentials: true
       })
       console.log(res)
       if (res.status !== 202) {
