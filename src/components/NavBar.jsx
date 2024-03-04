@@ -5,13 +5,28 @@ import { LuMoonStar, LuSun } from "react-icons/lu";
 import { Link, useLocation } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
 import { toogleTheme } from '../redux/theme/themeSlice';
+import axios from 'axios';
+import { signOutSuccess } from '../redux/user/userSlice';
 
 const NavBar = () => {
 
   const path = useLocation().pathname
   const { currentUser } = useSelector(state => state.user)
   const dispatch = useDispatch()
-  const {theme} = useSelector(state => state.theme)
+  const { theme } = useSelector(state => state.theme)
+  
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post('http://localhost:3000/user/signout')
+      if (res.status !== 200) {
+        console.log(res.data)
+      } else {
+        dispatch(signOutSuccess())
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Navbar className=' border-b-2'>
@@ -47,7 +62,7 @@ const NavBar = () => {
                 <Dropdown.Item>Profile</Dropdown.Item>
               </Link>
               <Dropdown.Divider />
-              <Dropdown.Item>Sign Out</Dropdown.Item>
+              <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
             </Dropdown>
           ): (
             <Link to={"/login"}>
