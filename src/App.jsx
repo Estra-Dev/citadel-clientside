@@ -9,6 +9,8 @@ import FooterComponent from "./components/FooterComponent"
 import Dashboard from "./pages/Dashboard"
 import { useSelector } from "react-redux"
 import PrivateRoute from "./components/PrivateRoute"
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute"
+import CreatePost from "./pages/CreatePost"
 
 function App() {
 
@@ -26,6 +28,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<OnlyAdminPrivateRoute />}>
+            <Route path="/create-post" element={<CreatePost />} />
           </Route>
         </Routes>
         <FooterComponent />
