@@ -4,14 +4,16 @@ import { FaUserTie } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signOutSuccess } from '../redux/user/userSlice';
+import { HiDocumentText } from "react-icons/hi";
 
 const DashSidebar = () => {
 
   const dispatch = useDispatch()
   const location = useLocation()
   const [tab, setTab] = useState("")
+  const {currentUser} = useSelector(state => state.user)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search)
@@ -39,18 +41,24 @@ const DashSidebar = () => {
   return (
     <Sidebar className=' w-full md:w-56'>
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup className=' flex flex-col gap-1'>
           <Link to={'/dashboard?tab=profile'}>
-            <Sidebar.Item active={tab === 'profile'} icon={FaUserTie} label="User" labelColor="dark" as='p'>
+            <Sidebar.Item active={tab === 'profile'} icon={FaUserTie} label={(currentUser.isAdmin || currentUser.rest.isAdmin) ? "Admin" : "User"} labelColor="dark" as='p'>
               Profile
             </Sidebar.Item>
           </Link>
-        </Sidebar.ItemGroup>
-        <Sidebar.ItemGroup>
+          {
+            (currentUser.isAdmin || currentUser.rest.isAdmin) && (
+              <Link to={'/dashboard?tab=posts'}>
+                <Sidebar.Item active={tab==="posts"} icon={HiDocumentText} as='div'>Posts</Sidebar.Item>
+              </Link>
+            )
+          }
           <Sidebar.Item icon={FaSignOutAlt} className=' cursor-pointer' as='p' onClick={handleSignOut}>
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>
+        
       </Sidebar.Items>
     </Sidebar>
   )
