@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
-import { Table } from 'flowbite-react'
+import { Button, Table } from 'flowbite-react'
 import {Link} from 'react-router-dom'
 
 const DashPosts = () => {
 
   const { currentUser } = useSelector(state => state.user)
   const [userPosts, setUserPosts] = useState([])
+  const [showMore, setShowMore] = useState(true)
 
   console.log(userPosts)
   const fetchPost = async () => {
@@ -15,6 +16,9 @@ const DashPosts = () => {
       const res = await axios.get(`http://localhost:3000/post/getposts?userId=${currentUser._id || currentUser.rest._id}`)
       if (res.status === 200) {
         setUserPosts(res.data.posts)
+      }
+      if (res.data.posts.length < 9) {
+        setShowMore(false)
       }
       console.log(res)
     } catch (error) {
@@ -27,6 +31,22 @@ const DashPosts = () => {
       fetchPost()
     }
   }, [currentUser._id])
+
+  const handleShowMore = async () => {
+    const startIndex = userPosts.length
+
+    try {
+      const res = await axios.get(`http://localhost:3000/post/getposts?userId=${currentUser._id || currentUser.rest._id}&startIndex=${startIndex}`)
+      if (res.status === 200) {
+        setUserPosts((prev) => [...prev, ...res.data.posts])
+        if (res.data.posts.length < 9) {
+          setShowMore(false)
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className=' table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
@@ -54,7 +74,7 @@ const DashPosts = () => {
                       </Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <Link to={`/post/${post.slug}`} className=' font-medium text-gray-900 dark:text-white'>{ post.title }</Link>
+                      <Link to={`/post/${post.slug}`} className=' font-medium text-gray-900 dark:text-white truncate'>{ post.title }</Link>
                     </Table.Cell>
                     <Table.Cell>
                       { post.category }
@@ -72,6 +92,11 @@ const DashPosts = () => {
               ))
             }
           </Table>
+          {
+            showMore && (
+              <Button className=' w-full text-teal-500 self-center text-sm' color='white' onClick={handleShowMore}>Show More</Button>
+            )
+          }
         </>
       ) : (
         <div className="">
