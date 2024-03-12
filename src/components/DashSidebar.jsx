@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOutSuccess } from '../redux/user/userSlice';
 import { HiDocumentText } from "react-icons/hi";
+import { HiMiniUsers } from "react-icons/hi2";
 
 const DashSidebar = () => {
 
@@ -51,6 +52,13 @@ const DashSidebar = () => {
             (currentUser.isAdmin || currentUser.rest.isAdmin) && (
               <Link to={'/dashboard?tab=posts'}>
                 <Sidebar.Item active={tab==="posts"} icon={HiDocumentText} as='div'>Posts</Sidebar.Item>
+              </Link>
+            )
+          }
+          {
+            (currentUser.isAdmin || currentUser.rest.isAdmin) && (
+              <Link to={'/dashboard?tab=users'}>
+                <Sidebar.Item active={tab==="users"} icon={HiMiniUsers} as='div'>Users</Sidebar.Item>
               </Link>
             )
           }
