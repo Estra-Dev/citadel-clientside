@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import {Button, Spinner} from 'flowbite-react'
 import CallToAction from '../components/CallToAction'
+import CommentSection from '../components/CommentSection'
 
 const PostPage = () => {
 
@@ -51,6 +52,9 @@ const PostPage = () => {
       <div dangerouslySetInnerHTML={{ __html: post && post.content }} className=' p-3 max-w-2xl mx-auto w-full post-content'></div>
       <div className=" max-w-4xl mx-auto w-full">
         <CallToAction />
+      </div>
+      <div className="">
+        <CommentSection postId={post._id} />
       </div>
     </main>
   )
