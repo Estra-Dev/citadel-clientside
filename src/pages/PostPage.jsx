@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import {Button, Spinner} from 'flowbite-react'
+import CallToAction from '../components/CallToAction'
 
 const PostPage = () => {
 
@@ -47,7 +48,10 @@ const PostPage = () => {
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className=' italic'>{ post && (post.content.length / 1000).toFixed(0) } min read</span>
       </div>
-      <div dangerouslySetInnerHTML={{__html: post && post.content}} className=' p-3 max-w-2xl mx-auto w-full post-content'></div>
+      <div dangerouslySetInnerHTML={{ __html: post && post.content }} className=' p-3 max-w-2xl mx-auto w-full post-content'></div>
+      <div className=" max-w-4xl mx-auto w-full">
+        <CallToAction />
+      </div>
     </main>
   )
 }
