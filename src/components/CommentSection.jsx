@@ -1,14 +1,19 @@
 import axios from 'axios'
 import { Alert, Button, Textarea } from 'flowbite-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useSelector} from 'react-redux'
 import { Link } from 'react-router-dom'
+import Comment from './Comment'
 
+// eslint-disable-next-line react/prop-types
 const CommentSection = ({ postId }) => {
   
   const { currentUser } = useSelector(state => state.user)
   const [comment, setComment] = useState('')
   const [commentError, setCommentError] = useState('')
+  const [comments, setComments] = useState([])
+
+  console.log(comments)
 
   const handleSubmit = async (ev) => {
     ev.preventDefault()
@@ -26,12 +31,27 @@ const CommentSection = ({ postId }) => {
       if (res.status === 200) {
         setComment('')
         setCommentError(null)
+        setComments([res.data, ...comments])
       }
     } catch (error) {
       setCommentError(error.response.data.message)
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/comment/getPostComments/${postId}`)
+        if (res.status === 200) {
+          setComments(res.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getComments()
+  }, [postId])
 
   return (
     <div className=' max-w-2xl mx-auto w-full p-3'>
@@ -64,6 +84,21 @@ const CommentSection = ({ postId }) => {
             <Button type='submit' outline gradientDuoTone={'purpleToBlue'}>Submit</Button>
           </div>
         </form>
+      )}
+      {comments === 0 ? (
+      <p className=' text-sm my-5'>No Comments yet!</p>
+      ) : (
+          <>
+            <div className=" text-sm my-5 flex item-center gap-1">
+              <p>Comments</p>
+              <div className=" border border-gray-400 py-1 px-2 rounded-sm">
+                <p>{ comments.length }</p>
+              </div>
+            </div>
+            {comments.map(comment => (
+              <Comment key={comment._id} comment={comment} />
+            ))}
+          </>
       )}
     </div>
   )
