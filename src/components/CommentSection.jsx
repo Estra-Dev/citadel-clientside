@@ -70,11 +70,20 @@ const CommentSection = ({ postId }) => {
             numberOfLikes: res.data.likes.length
           } : comment
         }))
+        
       }
       console.log(comments)
     } catch (error) {
       console.log(error)
     }
+  }
+
+  const handleEdit = async (comment, editedComment) => {
+    setComments(
+      comments.map(c => {
+        c._id === comment._id ? {...c, content: editedComment} : c
+      })
+    )
   }
 
   return (
@@ -110,7 +119,7 @@ const CommentSection = ({ postId }) => {
         </form>
       )}
       {comments === 0 ? (
-      <p className=' text-sm my-5'>No Comments yet!</p>
+        <p className=' text-sm my-5'>No Comments yet!</p>
       ) : (
           <>
             <div className=" text-sm my-5 flex item-center gap-1">
@@ -120,7 +129,7 @@ const CommentSection = ({ postId }) => {
               </div>
             </div>
             {comments.map(comment => (
-              <Comment key={comment._id} comment={comment} onLike={handleLike} />
+              <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={ handleEdit } />
             ))}
           </>
       )}
