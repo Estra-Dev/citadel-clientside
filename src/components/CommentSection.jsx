@@ -1,9 +1,10 @@
 import axios from 'axios'
-import { Alert, Button, Textarea } from 'flowbite-react'
+import { Alert, Button, Modal, Textarea } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import {useSelector} from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import Comment from './Comment'
+import { BsExclamationCircle } from "react-icons/bs";
 
 // eslint-disable-next-line react/prop-types
 const CommentSection = ({ postId }) => {
@@ -12,6 +13,8 @@ const CommentSection = ({ postId }) => {
   const [comment, setComment] = useState('')
   const [commentError, setCommentError] = useState('')
   const [comments, setComments] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [commentToDelete, setCommentToDelete] = useState(null)
   const navigate = useNavigate()
 
   const handleSubmit = async (ev) => {
@@ -86,6 +89,27 @@ const CommentSection = ({ postId }) => {
     )
   }
 
+  const handleDelete = async (commentId) => {
+    setShowModal(false)
+    try {
+      if (!currentUser) {
+        navigate('/login')
+      }
+      const res = await axios.delete(`http://localhost:3000/comment/deleteComment/${commentId}`, {
+        withCredentials: true
+      })
+      if (res.status === 200) {
+        
+        setComments(
+          comments.filter(comment => comment._id !== comment)
+        )
+         
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className=' max-w-2xl mx-auto w-full p-3'>
       {
@@ -129,10 +153,27 @@ const CommentSection = ({ postId }) => {
               </div>
             </div>
             {comments.map(comment => (
-              <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={ handleEdit } />
+              <Comment key={comment._id} comment={comment} onLike={handleLike} onEdit={handleEdit} onDelete={(commentId) => {
+                setShowModal(true)
+                setCommentToDelete(commentId)
+              } } />
             ))}
           </>
       )}
+
+      <Modal show={showModal} onClose={() => setShowModal(false)} popup size={'md'}>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <BsExclamationCircle className=' h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className=' text-lg text-gray-500 mb-5 dark:text-gray-400'>Are you sure you want to delete this comment?</h3>
+            <div className=" flex justify-center gap-4">
+              <Button color='failure' onClick={() => handleDelete(commentToDelete)}>Yes, I'm Sure</Button>
+              <Button onClick={() => setShowModal(false)} color='gray'>No, Cancel</Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }
