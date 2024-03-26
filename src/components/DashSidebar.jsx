@@ -9,6 +9,7 @@ import { signOutSuccess } from '../redux/user/userSlice';
 import { HiDocumentText } from "react-icons/hi";
 import { HiMiniUsers } from "react-icons/hi2";
 import { AiOutlineComment } from "react-icons/ai";
+import { RiDashboard2Fill } from "react-icons/ri";
 
 const DashSidebar = () => {
 
@@ -44,11 +45,19 @@ const DashSidebar = () => {
     <Sidebar className=' w-full md:w-56'>
       <Sidebar.Items>
         <Sidebar.ItemGroup className=' flex flex-col gap-1'>
+          {
+            (currentUser.isAdmin || currentUser.rest.isAdmin) && (
+              <Link to={'/dashboard?tab=dash'}>
+                <Sidebar.Item active={tab==="dash" || !tab} icon={RiDashboard2Fill} as='div'>Dashboard</Sidebar.Item>
+              </Link>
+            )
+          }
           <Link to={'/dashboard?tab=profile'}>
             <Sidebar.Item active={tab === 'profile'} icon={FaUserTie} label={(currentUser.isAdmin || currentUser.rest.isAdmin) ? "Admin" : "User"} labelColor="dark" as='p'>
               Profile
             </Sidebar.Item>
           </Link>
+          
           {
             (currentUser.isAdmin || currentUser.rest.isAdmin) && (
               <Link to={'/dashboard?tab=posts'}>
@@ -70,6 +79,7 @@ const DashSidebar = () => {
               </Link>
             )
           }
+          
           <Sidebar.Item icon={FaSignOutAlt} className=' cursor-pointer' as='p' onClick={handleSignOut}>
             Sign Out
           </Sidebar.Item>
