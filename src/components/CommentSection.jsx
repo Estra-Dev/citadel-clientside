@@ -23,7 +23,7 @@ const CommentSection = ({ postId }) => {
       return
     }
     try {
-      const res = await axios.post("http://localhost:3000/comment/create", {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/comment/create`, {
         content: comment,
         postId,
         userId: currentUser.rest._id || currentUser._id
@@ -44,7 +44,7 @@ const CommentSection = ({ postId }) => {
   useEffect(() => {
     const getComments = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/comment/getPostComments/${postId}`)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/comment/getPostComments/${postId}`)
         if (res.status === 200) {
           setComments(res.data)
         }
@@ -61,7 +61,7 @@ const CommentSection = ({ postId }) => {
         navigate('/login');
         return
       }
-      const res = await axios.put(`http://localhost:3000/comment/likeComment/${commentId}`, {}, {
+      const res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/comment/likeComment/${commentId}`, {}, {
         withCredentials: true
       })
 
@@ -95,7 +95,7 @@ const CommentSection = ({ postId }) => {
       if (!currentUser) {
         navigate('/login')
       }
-      const res = await axios.delete(`http://localhost:3000/comment/deleteComment/${commentId}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/comment/deleteComment/${commentId}`, {
         withCredentials: true
       })
       if (res.status === 200) {

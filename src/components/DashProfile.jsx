@@ -115,7 +115,7 @@ const DashProfile = () => {
     }
     try {
       dispatch(updateStart())
-      const res = await axios.put(`http://localhost:3000/user/update/${currentUser._id || currentUser.rest._id}`, formData, {
+      const res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/user/update/${currentUser._id || currentUser.rest._id}`, formData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       })
@@ -138,7 +138,7 @@ const DashProfile = () => {
     setShowModal(false)
     try {
       dispatch(deleteUserStart())
-      const res = await axios.delete(`http://localhost:3000/user/delete/${currentUser._id || currentUser.rest._id}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/delete/${currentUser._id || currentUser.rest._id}`, {
         headers: { authorization: currentUser.token },
         withCredentials: true
       })
@@ -155,7 +155,7 @@ const DashProfile = () => {
 
   const handleSignOut = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/user/signout')
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signout`)
       if (res.status !== 200) {
         console.log(res.data)
       } else {

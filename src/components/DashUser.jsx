@@ -17,7 +17,7 @@ const DashUser = () => {
   console.log(users)
   const fetchUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/user/getusers`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/getusers`, {
         withCredentials: true
       })
       if (res.status === 200) {
@@ -42,7 +42,7 @@ const DashUser = () => {
     const startIndex = users.length
 
     try {
-      const res = await axios.get(`http://localhost:3000/user/getusers?startIndex=${startIndex}`)
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/getusers?startIndex=${startIndex}`)
       if (res.status === 200) {
         setUsers((prev) => [...prev, ...res.data.users])
         if (res.data.users.length < 2) {
@@ -57,7 +57,7 @@ const DashUser = () => {
   const handleDeleteUser = async () => {
     setShowModal(false)
     try {
-      const res = await axios.delete(`http://localhost:3000/user/delete/${userIdToDelete}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/user/delete/${userIdToDelete}`, {
         withCredentials: true
       })
       if (res.status === 202) {

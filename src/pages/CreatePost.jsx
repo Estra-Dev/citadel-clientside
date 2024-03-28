@@ -62,7 +62,7 @@ const CreatePost = () => {
     ev.preventDefault()
     try {
       setPublishError(null)
-      const res = await axios.post("http://localhost:3000/post/create", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/post/create`, formData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       })

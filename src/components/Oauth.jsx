@@ -21,7 +21,7 @@ const Oauth = () => {
     try {
       const resultFroomGoogle = await signInWithPopup(auth, provider)
       console.log(resultFroomGoogle)
-      const res = await axios.post('http://localhost:3000/auth/google', {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/google`, {
         firstname: resultFroomGoogle._tokenResponse.firstName,
         lastname: resultFroomGoogle._tokenResponse.lastName,
         email: resultFroomGoogle._tokenResponse.email,

@@ -32,7 +32,7 @@ const Login = () => {
       return dispatch(signInFailure("Please fill out all Field"))
     }
     try {
-      const res = await axios.post("http://localhost:3000/auth/login", details, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, details, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       })

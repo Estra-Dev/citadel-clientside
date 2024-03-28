@@ -17,7 +17,7 @@ const Comment = ({ comment, onLike, onEdit, onDelete }) => {
     const getUser = async () => {
       try {
         // eslint-disable-next-line react/prop-types
-        const res = await axios.get(`http://localhost:3000/user/${comment.userId}`, {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/${comment.userId}`, {
           withCredentials: true
         })
         if (res.status === 200) {
@@ -37,7 +37,7 @@ const Comment = ({ comment, onLike, onEdit, onDelete }) => {
 
   const handleSave = async () => {
     try {
-      const res = await axios.put(`http://localhost:3000/comment/editComment/${comment._id}`, { content: editedContent}, {
+      const res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/comment/editComment/${comment._id}`, { content: editedContent}, {
         withCredentials: true
       })
       if (res.status === 200) {

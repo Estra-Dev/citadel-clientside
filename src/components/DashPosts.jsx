@@ -16,7 +16,7 @@ const DashPosts = () => {
   console.log(userPosts)
   const fetchPost = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/post/getposts?userId=${currentUser._id || currentUser.rest._id}`)
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?userId=${currentUser._id || currentUser.rest._id}`)
       if (res.status === 200) {
         setUserPosts(res.data.posts)
       }
@@ -39,7 +39,7 @@ const DashPosts = () => {
     const startIndex = userPosts.length
 
     try {
-      const res = await axios.get(`http://localhost:3000/post/getposts?userId=${currentUser._id || currentUser.rest._id}&startIndex=${startIndex}`)
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?userId=${currentUser._id || currentUser.rest._id}&startIndex=${startIndex}`)
       if (res.status === 200) {
         setUserPosts((prev) => [...prev, ...res.data.posts])
         if (res.data.posts.length < 9) {
@@ -54,7 +54,7 @@ const DashPosts = () => {
   const handleDeletePost = async () => {
     setShowModal(false)
     try {
-      const res = await axios.delete(`http://localhost:3000/post/deletepost/${postToDelete}/${currentUser.rest._id || currentUser._id}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/post/deletepost/${postToDelete}/${currentUser.rest._id || currentUser._id}`, {
         withCredentials: true
       })
       if (res.status !== 200) {

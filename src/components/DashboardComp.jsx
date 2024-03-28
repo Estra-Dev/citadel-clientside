@@ -25,7 +25,7 @@ const DashboardComp = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/user/getusers?limit=5', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/getusers?limit=5`, {
           withCredentials: true
         })
         if (res.status === 200) {
@@ -39,7 +39,7 @@ const DashboardComp = () => {
     }
     const fetchPost = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/post/getposts?limit=5')
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?limit=5`)
         if (res.status === 200) {
           setPosts(res.data.posts)
           setTotalPosts(res.data.totalPost)
@@ -52,7 +52,7 @@ const DashboardComp = () => {
     }
     const fetchComment = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/comment/getComments?limit=5', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/comment/getComments?limit=5`, {
           withCredentials: true
         })
         if (res.status === 200) {

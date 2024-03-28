@@ -17,7 +17,7 @@ const DashComment = () => {
   console.log(comments)
   const fetchComments = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/comment/getComments`, {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/comment/getComments`, {
         withCredentials: true
       })
       if (res.status === 200) {
@@ -42,7 +42,7 @@ const DashComment = () => {
     const startIndex = comments.length
 
     try {
-      const res = await axios.get(`http://localhost:3000/comment/getPostComments?startIndex=${startIndex}`)
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/comment/getPostComments?startIndex=${startIndex}`)
       if (res.status === 200) {
         setComments((prev) => [...prev, ...res.data.comments])
         if (res.data.comments.length < 2) {
@@ -57,7 +57,7 @@ const DashComment = () => {
   const handleDeleteComment = async () => {
     setShowModal(false)
     try {
-      const res = await axios.delete(`http://localhost:3000/comment/deleteComment/${commentIdToDelete}`, {
+      const res = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/comment/deleteComment/${commentIdToDelete}`, {
         withCredentials: true
       })
       if (res.status === 202) {

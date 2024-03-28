@@ -31,7 +31,7 @@ const NavBar = () => {
   
   const handleSignOut = async () => {
     try {
-      const res = await axios.post('http://localhost:3000/user/signout')
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signout`)
       if (res.status !== 200) {
         console.log(res.data)
       } else {

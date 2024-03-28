@@ -17,7 +17,7 @@ const PostPage = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/post/getposts?slug=${postSlug}`)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?slug=${postSlug}`)
         if (res.status !== 200) {
           setError(true)
           setLoading(false)
@@ -39,7 +39,7 @@ const PostPage = () => {
   useEffect(() => {
     const fetchRecentPosts = async () => {
       try {
-        const res = await axios(`http://localhost:3000/post/getposts?limit=3`)
+        const res = await axios(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?limit=3`)
         if (res.status === 200) {
           setRecentPosts(res.data.posts)
         }

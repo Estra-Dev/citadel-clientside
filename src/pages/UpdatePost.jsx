@@ -24,7 +24,7 @@ const UpdatePost = () => {
   useEffect(() => {
     try {
       const fetchPost = async () => {
-        const res = await axios.get(`http://localhost:3000/post/getposts?postId=${postId}`)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?postId=${postId}`)
         if (res.status !== 200) {
           console.log(res)
           setPublishError(res.response.data.message)
@@ -83,7 +83,7 @@ const UpdatePost = () => {
     ev.preventDefault()
     try {
       setPublishError(null)
-      const res = await axios.put(`http://localhost:3000/post/updatepost/${postId}/${currentUser.rest._id || currentUser._id}`, formData, {
+      const res = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/post/updatepost/${postId}/${currentUser.rest._id || currentUser._id}`, formData, {
         headers: { "Content-Type": "application/json" },
         withCredentials: true
       })

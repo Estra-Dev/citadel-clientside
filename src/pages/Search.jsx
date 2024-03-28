@@ -38,7 +38,7 @@ console.log(sideBarData)
       setLoading(true)
       const searchQuery = urlParams.toString()
       try {
-        const res = await axios.get(`http://localhost:3000/post/getposts?${searchQuery}`)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?${searchQuery}`)
 
         if (res.status === 200) {
           setPosts(res.data.posts)
@@ -96,7 +96,7 @@ console.log(sideBarData)
     const searchQuery = urlParams.toString()
 
     try {
-      const res = await axios.get(`http://localhost:3000/post/getposts?${searchQuery}`)
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?${searchQuery}`)
       if (res.status === 200) {
         setPosts([...posts, ...res.data.posts])
         if (res.data.posts.length === 9) {

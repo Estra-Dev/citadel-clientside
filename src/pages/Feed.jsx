@@ -11,7 +11,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/post/getposts?limit=9")
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/post/getposts?limit=9`)
         if (res.status === 200) {
           setPosts(res.data.posts)
         }

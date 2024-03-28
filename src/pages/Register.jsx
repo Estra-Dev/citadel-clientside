@@ -35,7 +35,7 @@ const Register = () => {
       
     }
     try {
-      const res = await axios.post("http://localhost:3000/auth/register", details, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, details, {
         headers: {"Content-Type": "application/json"}
       })
       if (res.status === 201) {
